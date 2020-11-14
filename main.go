@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 	"net"
+	"github.com/gobuffalo/packr"
 	"github.com/alexandrevicenzi/go-sse"
 )
 
@@ -34,9 +35,8 @@ func startHTTPServer(gamestartC chan string, playerlocC chan string, playercount
 	defer s.Shutdown()
 
 	http.Handle("/events/", s)
-	static := http.FileServer(http.Dir("./Web"))
 	box := packr.NewBox("./Web")
-	http.Handle("/", static)
+	http.Handle("/", http.FileServer(box))
 
 
 	go http.ListenAndServe(":8080", nil)
