@@ -20,15 +20,15 @@ var placeholder_portals =   [
 var placeholder_floor_number = 0
 
 // Initialise image variables for portals.
-let in_portal_0;
-let in_portal_1;
-let in_portal_2;
-let in_portal_3;
+let in_pic_0;
+let in_pic_1;
+let in_pic_2;
+let in_pic_3;
 
-let out_portal_0;
-let out_portal_1;
-let out_portal_2;
-let out_portal_3;
+let out_pic_0;
+let out_pic_1;
+let out_pic_2;
+let out_pic_3;
 
 var map_matrix = placeholder_map_matrix;
 var floor_number = placeholder_floor_number; // Current floor number.
@@ -48,8 +48,15 @@ var map_y
 
 // Preloads the images for the portals. TODO: Finish this.
 function preload() {
-    in_portal_0 = loadImage('asset/in_arrow-0.png')
-    out_portal_0 = loadImage('asset/out_arrow-0.png')
+    in_pic_0 = loadImage('asset/in_arrow-0.png')
+    in_pic_1 = loadImage('asset/in_arrow-1.png')
+    in_pic_2 = loadImage('asset/in_arrow-2.png')
+    in_pic_3 = loadImage('asset/in_arrow-3.png')
+
+    out_pic_0 = loadImage('asset/out_arrow-0.png')
+    out_pic_1 = loadImage('asset/out_arrow-1.png')
+    out_pic_2 = loadImage('asset/out_arrow-2.png')
+    out_pic_3 = loadImage('asset/out_arrow-3.png')
 }
 
 function setup() {
@@ -57,6 +64,7 @@ function setup() {
 }
 
 function draw() {
+    let portal;
     background(255, 0, 0)  // TODO: Change colour back when done.
 
     // Draw the main map.
@@ -68,12 +76,51 @@ function draw() {
 
     // Iterate through the "in" portals.
     for (i = 0; i < current_in_floor_portals.length; i++) {
-        // console.log(current_in_floor_portals[1])
-        image(in_portal_0, canvas_scale * current_in_floor_portals[i][1], canvas_scale * current_in_floor_portals[i][2])
+        // Determines which picture of portal to use depending on orientation.
+        switch(current_in_floor_portals[i][3]) {
+
+            case 0:
+                portal = in_pic_0;
+                break;
+
+            case 1:
+                portal = in_pic_1;
+                break;
+
+            case 2:
+                portal = in_pic_2;
+                break;
+
+            case 3:
+                portal = in_pic_3;
+                break;
+        }
+
+        image(portal, canvas_scale * current_in_floor_portals[i][1], canvas_scale * current_in_floor_portals[i][2])
     }
     // Iterate through the "out" portals.
     for (i = 0; i < current_out_floor_portals.length; i++) {
-        image(out_portal_0, canvas_scale * current_out_floor_portals[i][1], canvas_scale * current_out_floor_portals[i][2])
+        // Determines which picture of portal to use depending on orientation.
+        switch(current_out_floor_portals[i][3]) {
+
+            case 0:
+                portal = out_pic_0;
+                break;
+
+            case 1:
+                portal = out_pic_1;
+                break;
+
+            case 2:
+                portal = out_pic_2;
+                break;
+
+            case 3:
+                portal = out_pic_3;
+                break;
+        }
+
+        image(portal, canvas_scale * current_out_floor_portals[i][1], canvas_scale * current_out_floor_portals[i][2])
     }
 }
 
