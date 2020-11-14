@@ -1,29 +1,71 @@
 package main
 
 import (
-	"io"
 	"net/http"
+	"time"
 	"net"
+	"github.com/gobuffalo/packr"
+	"github.com/alexandrevicenzi/go-sse"
 )
 
-func hello(w http.ResponseWriter, r *http.Request){
-	io.WriteString(w, "Hello, World")
+
+func handleConnection(conn net.Conn) {
+
+
 }
 
-
-func connectToGame() net.Conn {
-	conn, err := net.Dial("tcp", "127.0.0.1:46920")
+func startTCPServer(){
+	ln, err := net.Listen("tcp", ":46920")
 	if err != nil {
-		panic("Failed to connect to Game Server")
+		panic("Error starting server")
 	}
-	return conn
+	conn, err := ln.Accept()
+	if err != nil {
+		panic("Could not accept connection")
+	}
+	defer conn.Close()
+
+
+
+
 }
 
+func startHTTPServer(gamestartC chan string, playerlocC chan string, playercountC chan chan int){
+	s := sse.NewServer(nil)
+	defer s.Shutdown()
 
+	http.Handle("/events/", s)
+	box := packr.NewBox("./Web")
+	http.Handle("/", http.FileServer(box))
+
+
+	go http.ListenAndServe(":8080", nil)
+
+	for {
+		select {
+		case mapjson := <-gamestartC:
+			s.SendMessage("/events/game", sse.SimpleMessage(mapjson))
+		case playerlocation:=  <-playerlocC:
+			s.SendMessage("/events/game", sse.SimpleMessage(playerlocation))
+		case pcC := <-playercountC:
+			k, _ :=s.GetChannel("/events/game")
+			pcC <- k.ClientCount()
+		}
+	}
+
+}
 
 func main(){
-	http.HandleFunc("/", hello)
-	http.ListenAndServe(":8080", nil)
+	gamestartC := make(chan string)
+	playerlocC := make(chan string)
+	playercountC := make(chan chan int)
+
+	go startHTTPServer(gamestartC, playerlocC, playercountC)
+	go startTCPServer()
+
+
+	time.Sleep(1*time.Second)
+
 }
 
 
