@@ -26,7 +26,7 @@ func startTCPServer(){
 	}
 }
 
-func startHTTPServer(gamestartC chan string, playerlocC chan string, playercountC chan int){
+func startHTTPServer(gamestartC chan string, playerlocC chan string, playercountC chan chan int){
 	s := sse.NewServer(nil)
 	defer s.Shutdown()
 
@@ -35,23 +35,25 @@ func startHTTPServer(gamestartC chan string, playerlocC chan string, playercount
 
 	go http.ListenAndServe(":8080", nil)
 
+	clients := make(map[int]sse.Client)
 	for {
 		select {
 		case mapjson := <-gamestartC:
-			s.SendMessage("/events/gamestart", sse.SimpleMessage(mapjson))
+			
+			s.SendMessage("/events/game", sse.SimpleMessage(mapjson))
 		case playerlocation:=  <-playerlocC:
-			s.SendMessage("/events/playerloc", sse.SimpleMessage(playerlocation))
+
+		case pcC := <-playercountC:
+			pcC <- s.GetChannel("/events/game").ClientCount()
 		}
 	}
 
 }
 
-
-
 func main(){
 	gamestartC := make(chan string)
 	playerlocC := make(chan string)
-	playercountC := make(chan int)
+	playercountC := make(chan chan int)
 
 	go startHTTPServer(gamestartC, playerlocC, playercountC)
 
