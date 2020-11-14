@@ -1,6 +1,4 @@
 // TODO: PLACEHOLDERS
-var placeholder_map_width = 700
-var placeholder_map_height = 800
 var placeholder_map_matrix = 	[
 		[1,0,0,1,0,0,1],
 		[1,1,0,1,0,1,1],
@@ -17,8 +15,8 @@ var placeholder_map_matrix2 =   [
 ]
 
 var map_matrix = placeholder_map_matrix;
-var map_width = placeholder_map_width;
-var map_height = placeholder_map_height;
+var map_width;
+var map_height;
 var canvas_scale = 100;
 
 // This variable contains a list of where all of the empty spaces should be
@@ -51,11 +49,11 @@ function create_map() {
     let render_location_y
 
     // Set size of the canvas.
-    map_x = map_matrix.length
-    map_y = map_matrix[0].length
+    map_x = map_matrix[0].length
+    map_y = map_matrix.length
 
-    map_width = canvas_scale * map_y
-    map_height = canvas_scale * map_x
+    map_width = canvas_scale * map_x
+    map_height = canvas_scale * map_y
 
     // TODO: Remove logs below when done.
     console.log("PRICK")
@@ -66,7 +64,6 @@ function create_map() {
     console.log("CUNT")
 
     // Iterate through map matrix and draw map.
-    // TODO: Fix bug here: Keeps rendering an extra line at the bottom.
     for (var x = 0; x < map_x; x++) {
         for (var y = 0; y < map_y; y++) {
 
@@ -82,7 +79,7 @@ function create_map() {
 
                 // If empty.
                 case 0:
-                    empty_location.push([render_location_x, render_location_y])
+                    empty_location.push([render_location_x, render_location_y]);
                     break;
 
                 // If wall.
