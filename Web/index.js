@@ -19,6 +19,16 @@ var placeholder_portals =   [
 ]
 var placeholder_floor_number = 0
 
+// Initialise image variables for portals.
+let in_portal_0;
+let in_portal_1;
+let in_portal_2;
+let in_portal_3;
+
+let out_portal_0;
+let out_portal_1;
+let out_portal_2;
+let out_portal_3;
 
 var map_matrix = placeholder_map_matrix;
 var floor_number = placeholder_floor_number; // Current floor number.
@@ -36,18 +46,34 @@ var empty_location = [];
 var map_x
 var map_y
 
+// Preloads the images for the portals. TODO: Finish this.
+function preload() {
+    in_portal_0 = loadImage('asset/in_arrow-0.png')
+    out_portal_0 = loadImage('asset/out_arrow-0.png')
+}
+
 function setup() {
     createCanvas(map_width, map_height)
 }
 
 function draw() {
-    background(0, 0, 0)
+    background(255, 0, 0)  // TODO: Change colour back when done.
 
-
+    // Draw the main map.
     for (var i = 0; i < empty_location.length; i++) {
         // console.log(empty_location)
         // console.log(i, empty_location[i])
         square(empty_location[i][0], empty_location[i][1], canvas_scale)
+    }
+
+    // Iterate through the "in" portals.
+    for (i = 0; i < current_in_floor_portals.length; i++) {
+        // console.log(current_in_floor_portals[1])
+        image(in_portal_0, canvas_scale * current_in_floor_portals[i][1], canvas_scale * current_in_floor_portals[i][2])
+    }
+    // Iterate through the "out" portals.
+    for (i = 0; i < current_out_floor_portals.length; i++) {
+        image(out_portal_0, canvas_scale * current_out_floor_portals[i][1], canvas_scale * current_out_floor_portals[i][2])
     }
 }
 
