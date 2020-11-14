@@ -1,29 +1,61 @@
 package main
 
 import (
-	"io"
 	"net/http"
 	"net"
+	"github.com/alexandrevicenzi/go-sse"
 )
 
-func hello(w http.ResponseWriter, r *http.Request){
-	io.WriteString(w, "Hello, World")
+
+func handleConnection(conn net.Conn) {
+	defer conn.Close()
+
 }
 
-
-func connectToGame() net.Conn {
-	conn, err := net.Dial("tcp", "127.0.0.1:46920")
+func startTCPServer(){
+	ln, err := net.Listen("tcp", ":46920")
 	if err != nil {
-		panic("Failed to connect to Game Server")
+		panic("Error starting server")
 	}
-	return conn
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			panic("Could not accept connection")
+		}
+		handleConnection(conn)
+	}
+}
+
+func startHTTPServer(gamestartC chan string, playerlocC chan string, playercountC chan int){
+	s := sse.NewServer(nil)
+	defer s.Shutdown()
+
+	http.Handle("/events/", s)
+
+
+	go http.ListenAndServe(":8080", nil)
+
+	for {
+		select {
+		case mapjson := <-gamestartC:
+			s.SendMessage("/events/gamestart", sse.SimpleMessage(mapjson))
+		case playerlocation:=  <-playerlocC:
+			s.SendMessage("/events/playerloc", sse.SimpleMessage(playerlocation))
+		}
+	}
+
 }
 
 
 
 func main(){
-	http.HandleFunc("/", hello)
-	http.ListenAndServe(":8080", nil)
+	gamestartC := make(chan string)
+	playerlocC := make(chan string)
+	playercountC := make(chan int)
+
+	go startHTTPServer(gamestartC, playerlocC, playercountC)
+
+
 }
 
 
