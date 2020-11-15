@@ -43,28 +43,93 @@ var portals_list;
 var current_in_floor_portals = []; // List of "in" portals relating to current floor.
 var current_out_floor_portals = []; // List of "out" portals relating to the current floor.
 
+var floor_colour_r;
+var floor_colour_g;
+var floor_colour_b;
+
+function httpGet(theURL) {
+    var xmlHTTP = new xmlHTTP();
+    xmlHTTP.open("GET", theURL, false);
+    xmlHTTP(null);
+    return xmlHTTP.responceText;
+}
+
 function parseJson(jsonData)
 {
     if(jsonData.hasOwnProperty("Maps")) {
         // A new map has been optained.
-        floor_number = 1; // TODO: Change this when available.
-        map_matrix = jsonData["Maps"][0];
-        portals_list = jsonData["Portals"];
-        console.log(map_matrix);
+        httpGet('http://192.168.1.171:8080/id').then((floor => {
 
-        // Set size of the canvas.
-        map_x = map_matrix[0].length
-        map_y = map_matrix.length
+            console.log(floor)
+            floor = parseInt(floor)
 
-        // Scale the map on the screen.
-        map_width = canvas_scale * map_x
-        map_height = canvas_scale * map_y
+            switch (floor) {
+                case 0:
+                    floor_colour_r = 0
+                    floor_colour_g = 0
+                    floor_colour_b = 0
+                    console.log("White")
+                    break;
 
-        // Create canvas with sufficient size.
-        createCanvas(map_width, map_height)
+                case 1:
+                    floor_colour_r = 245
+                    floor_colour_g = 181
+                    floor_colour_b = 61
+                    console.log("gold")
+                    break;
+
+                case 2:
+                    floor_colour_r = 61
+                    floor_colour_g = 245
+                    floor_colour_b = 211
+                    console.log("case 3")
+                    break;
+
+                case 3:
+                    floor_colour_r = 61
+                    floor_colour_g = 196
+                    floor_colour_b = 245
+                    console.log("case 4")
+                    break;
+
+                case 4:
+                    floor_colour_r = 232
+                    floor_colour_g = 56
+                    floor_colour_b = 220
+                    console.log("case 5")
+                    break;
+
+                case 5:
+                    floor_colour_r = 159
+                    floor_colour_g = 61
+                    floor_colour_b = 245
+                    console.log("case 6")
+                    break;
+
+            }
+
+            floor_number = floor
+            map_matrix = jsonData["Maps"][floor-1];
+            portals_list = jsonData["Portals"];
+            console.log(map_matrix);
+
+            // Set size of the canvas.
+            map_x = map_matrix[0].length
+            map_y = map_matrix.length
+
+            // Scale the map on the screen.
+            map_width = canvas_scale * map_x
+            map_height = canvas_scale * map_y
+
+            // Create canvas with sufficient size.
+            createCanvas(map_width, map_height)
 
 
-        mapFlag = true;
+            mapFlag = true;
+        })); // TODO: Change this when available.
+
+
+
     }
     else
     {
@@ -127,7 +192,7 @@ function draw() {
     create_map()
 
     let portal;
-    background(255, 0, 0)  // TODO: Change colour back when done.
+    background(floor_colour_r, floor_colour_g, floor_colour_b)  // TODO: Change colour back when done.
 
     // Draw the main map.
     for (var i = 0; i < empty_location.length; i++) {
