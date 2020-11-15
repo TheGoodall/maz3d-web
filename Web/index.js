@@ -124,7 +124,7 @@ function parseJson(jsonData)
             // Create canvas with sufficient size.
             createCanvas(map_width, map_height)
 
-            empty_location = []
+            empty_location = [] // TODO: New
             mapFlag = true;
         })); // TODO: Change this when available.
 
@@ -269,8 +269,9 @@ function draw() {
 
         image(portal, canvas_scale * x_coord, canvas_scale * y_coord)
     }
-    if(position)
+    if(position && position["World"] === floor_number)
     {
+        console.log("level ", floor_number)
         square((position["x"])*canvas_scale, (map_y - position["y"])*canvas_scale, canvas_scale)
     }
 }
