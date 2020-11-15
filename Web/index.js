@@ -78,7 +78,7 @@ function parseJson(jsonData)
 let mapFlag = false;
 
 // Parsing JSON. TODO: Uncomment this when done.
-e = new EventSource('/events/game');
+e = new EventSource('http://192.168.1.171:8080/events/game');
 e.onmessage = function(event) {
     console.log(event.data);
     console.log("PRICK")  // TODO: Remove this when done.
@@ -205,8 +205,7 @@ function draw() {
     }
     if(position)
     {
-        var size = 0.02;
-        square((position["x"]+size)*canvas_scale, (position["y"]+size)*canvas_scale, canvas_scale)
+        square((position["x"])*canvas_scale, (map_y - position["y"])*canvas_scale, canvas_scale)
     }
 }
 
