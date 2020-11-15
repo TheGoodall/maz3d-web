@@ -1,24 +1,3 @@
-// TODO: PLACEHOLDERS
-var placeholder_map_matrix = 	[
-		[1,0,0,1,0,0,1],
-		[1,1,0,1,0,1,1],
-		[1,1,0,1,0,1,1],
-		[1,1,0,1,0,1,1],
-		[1,1,0,1,0,1,1],
-		[1,1,0,1,0,1,1],
-		[1,1,0,1,0,1,1],
-		[1,1,0,1,0,1,1],
-	]
-var placeholder_map_matrix2 =   [
-    [1, 0],
-    [0, 1]
-]
-var placeholder_portals =   [
-    [[0, 0, 0, 0], [1, 4, 4, 2]],
-    [[0, 3, 4, 2], [0, 1, 1, 1]],
-    [[0, 1, 0, 0], [2, 2, 2, 2]]
-]
-var placeholder_floor_number = 1
 
 
 
@@ -38,7 +17,7 @@ var position;
 var floor_number; // Current floor number.
 var map_width;
 var map_height;
-var canvas_scale = 50;  // TODO: Fix scaling.
+var canvas_scale = 50;
 var portals_list;
 var current_in_floor_portals = []; // List of "in" portals relating to current floor.
 var current_out_floor_portals = []; // List of "out" portals relating to the current floor.
@@ -124,10 +103,9 @@ function parseJson(jsonData)
             // Create canvas with sufficient size.
             createCanvas(map_width, map_height)
 
-            empty_location = [] // TODO: New
+            empty_location = []
             mapFlag = true;
-        })); // TODO: Change this when available.
-
+        }));
 
 
     }
@@ -142,18 +120,14 @@ function parseJson(jsonData)
 // Flags whether or not map has been received.
 let mapFlag = false;
 
-// Parsing JSON. TODO: Uncomment this when done.
+// Parsing JSON..
 e = new EventSource('http://192.168.1.171:8080/events/game');
 e.onmessage = function(event) {
     console.log(event.data);
-    console.log("PRICK")  // TODO: Remove this when done.
     var jsonData = JSON.parse(event.data);
     parseJson(jsonData)
 };
 
-// TODO: Remove below when done.
-// parseJson({"Maps":[[[false,false,false,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]]],
-//     "Portals":[{"In":{"World":1,"X":2,"Y":2,"Rotation":3},"Out":{"World":1,"X":5,"Y":2,"Rotation":2}},{"In":{"World":5,"X":6,"Y":7,"Rotation":1},"Out":{"World":4,"X":5,"Y":6,"Rotation":7}}]})
 
 // This variable contains a list of where all of the empty spaces should be
 // ie, the places that the player should be able to walk through.
@@ -162,7 +136,7 @@ var empty_location = [];
 var map_x
 var map_y
 
-// Preloads the images for the portals. TODO: Finish this.
+// Preloads the images for the portals.
 function preload() {
     in_pic_0 = loadImage('asset/in_arrow-0.png')
     in_pic_1 = loadImage('asset/in_arrow-1.png')
@@ -187,13 +161,12 @@ function draw() {
     if (!mapFlag) {
         return
     }
-    console.log("FUCK") // TODO: Remove this when done.
     // createCanvas(map_width, map_height)
     document.getElementById("header").style.visibility = "hidden"
     create_map()
 
     let portal;
-    background(floor_colour_r, floor_colour_g, floor_colour_b)  // TODO: Change colour back when done.
+    background(floor_colour_r, floor_colour_g, floor_colour_b)
 
     // Draw the main map.
     for (var i = 0; i < empty_location.length; i++) {
