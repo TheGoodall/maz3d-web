@@ -189,6 +189,7 @@ function draw() {
     }
     console.log("FUCK") // TODO: Remove this when done.
     // createCanvas(map_width, map_height)
+    document.getElementById("header").style.visibility = "hidden"
     create_map()
 
     let portal;
