@@ -34,6 +34,7 @@ let out_pic_2;
 let out_pic_3;
 
 var map_matrix = placeholder_map_matrix;
+var position;
 var floor_number = placeholder_floor_number; // Current floor number.
 var map_width;
 var map_height;
@@ -42,14 +43,23 @@ var portals_list = placeholder_portals;
 var current_in_floor_portals = []; // List of "in" portals relating to current floor.
 var current_out_floor_portals = []; // List of "out" portals relating to the current floor.
 
-// Parsing JSON.
-e = new EventSource('/events/game');
+// Parsing JSON. TODO: Uncomment this when done.
+e = new EventSource('http://192.168.1.171:8080/events/game');
 e.onmessage = function(event) {
     console.log(event.data);
+    console.log("PRICK")
     var jsonData = JSON.parse(event.data);
-    floor_number = placeholder_floor_number; // TODO: Change this when available.
+    if(jsonData.hasOwnProperty("map"))
+    {
+          floor_number = placeholder_floor_number; // TODO: Change this when available.
     map_matrix = jsonData["map"];
     portals_list = jsonData["portals"];
+    }
+    else
+    {
+        position = jsonData;
+
+    }
 };
 
 // This variable contains a list of where all of the empty spaces should be
@@ -134,6 +144,11 @@ function draw() {
         }
 
         image(portal, canvas_scale * current_out_floor_portals[i][1], canvas_scale * current_out_floor_portals[i][2])
+    }
+    if(position)
+    {
+        var size = 0.02;
+        square((position["x"]+size)*canvas_scale, (position["y"]+size)*canvas_scale, canvas_scale)
     }
 }
 
