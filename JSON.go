@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
 	"strings"
 	"strconv"
@@ -110,11 +109,6 @@ func formatToJSON(data string) string {
 
 
 	datums := datum{Maps, Portals}
-	print("\n\n")
-	fmt.Printf("%v", datums)
-	print("\n\n")
 	jsondatums, _:= json.Marshal(datums)
-	print(string(jsondatums))
-	print("\n\n")
 	return string(jsondatums)
 }
