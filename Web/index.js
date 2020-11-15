@@ -269,7 +269,7 @@ function draw() {
 
         image(portal, canvas_scale * x_coord, canvas_scale * y_coord, canvas_scale, canvas_scale)
     }
-    if(position && position["World"] === floor_number)
+    if(position && Math.round(["world"]+1) == floor_number)
     {
         console.log("level ", floor_number)
         square((position["x"])*canvas_scale, (map_y - position["y"])*canvas_scale, canvas_scale)
