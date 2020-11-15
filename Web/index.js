@@ -124,7 +124,7 @@ function parseJson(jsonData)
             // Create canvas with sufficient size.
             createCanvas(map_width, map_height)
 
-
+            empty_location = []
             mapFlag = true;
         })); // TODO: Change this when available.
 
