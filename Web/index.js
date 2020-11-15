@@ -45,25 +45,40 @@ var current_out_floor_portals = []; // List of "out" portals relating to the cur
 
 function parseJson(jsonData)
 {
-    if(jsonData.hasOwnProperty("Maps"))
-    {
-    floor_number = 1; // TODO: Change this when available.
-    map_matrix = jsonData["Maps"][0];
-    portals_list = jsonData["Portals"];
-    console.log(map_matrix);
-    flag = true;
+    if(jsonData.hasOwnProperty("Maps")) {
+        // A new map has been optained.
+        floor_number = 1; // TODO: Change this when available.
+        map_matrix = jsonData["Maps"][0];
+        portals_list = jsonData["Portals"];
+        console.log(map_matrix);
+
+        // Set size of the canvas.
+        map_x = map_matrix[0].length
+        map_y = map_matrix.length
+
+        // Scale the map on the screen.
+        map_width = canvas_scale * map_x
+        map_height = canvas_scale * map_y
+
+        // Create canvas with sufficient size.
+        createCanvas(map_width, map_height)
+
+
+        mapFlag = true;
     }
     else
     {
         position = jsonData;
+        console.log(position);
 
     }
 }
 
-let flag = false;
+// Flags whether or not map has been received.
+let mapFlag = false;
 
 // Parsing JSON. TODO: Uncomment this when done.
-e = new EventSource('http://192.168.1.171:8080/events/game');
+e = new EventSource('/events/game');
 e.onmessage = function(event) {
     console.log(event.data);
     console.log("PRICK")  // TODO: Remove this when done.
@@ -71,7 +86,7 @@ e.onmessage = function(event) {
     parseJson(jsonData)
 };
 
-// // TODO: Remove below when done.
+// TODO: Remove below when done.
 // parseJson({"Maps":[[[false,false,false,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]]],
 //     "Portals":[{"In":{"World":1,"X":2,"Y":2,"Rotation":3},"Out":{"World":1,"X":5,"Y":2,"Rotation":2}},{"In":{"World":5,"X":6,"Y":7,"Rotation":1},"Out":{"World":4,"X":5,"Y":6,"Rotation":7}}]})
 
@@ -96,16 +111,19 @@ function preload() {
 }
 
 function setup() {
+    if (!mapFlag) {
+        return;
+    }
     createCanvas(map_width, map_height)
 }
 
 function draw() {
 
-    if (!flag) {
+    if (!mapFlag) {
         return
     }
-    console.log("FUCK")
-    createCanvas(map_width, map_height)
+    console.log("FUCK") // TODO: Remove this when done.
+    // createCanvas(map_width, map_height)
     create_map()
 
     let portal;
@@ -199,16 +217,6 @@ function create_map() {
     let render_location_y
 
 
-
-    // Set size of the canvas.
-    map_x = map_matrix[0].length
-    map_y = map_matrix.length
-
-    // Scale the map on the screen.
-    map_width = canvas_scale * map_x
-    map_height = canvas_scale * map_y
-
-
     // Iterate through map matrix and draw map.
     for (var x = 0; x < map_x; x++) {
         for (var y = 0; y < map_y; y++) {
@@ -226,30 +234,9 @@ function create_map() {
 
         }
     }
-
-    // // Initialise information about the portals.
-    // // Iterate through the list of portals.
-    // for (let i = 0; i < portals_list.length; i++) {
-    //     // TODO: Delete these console.logs.
-    //     console.log("SHIT")
-    //
-    //     // Separate portals into "in" portals and "out" portals.
-    //     // Collect all "in" portals corresponding to current floor.
-    //     if (portals_list[i][0][0] === floor_number) {
-    //         current_in_floor_portals.push(portals_list[i][0])
-    //     }
-    //
-    //     // Collect all "out" portals corresponding to current floor.
-    //     if (portals_list[i][1][0] === floor_number) {
-    //         current_out_floor_portals.push(portals_list[i][1])
-    //     }
-    // }
         current_in_floor_portals = []
         current_out_floor_portals = []
         for (let i = 0; i < portals_list.length; i++) {
-        // TODO: Delete these console.logs.
-        // TODO: Fix portals properly.
-            console.log("SHIT")
 
         // Separate portals into "in" portals and "out" portals.
         // Collect all "in" portals corresponding to current floor.
