@@ -272,10 +272,10 @@ function draw() {
 
         image(portal, canvas_scale * x_coord, canvas_scale * y_coord, canvas_scale, canvas_scale)
     }
-    if(Math.round(position["World"]+1) == floor_number)
+    if(Math.round(position["world"]+1) == floor_number)
     {
         console.log("level ", floor_number)
-        square((position["x"])*canvas_scale, (map_y - position["y"])*canvas_scale, 10, 10)
+        image(player_pic, canvas_scale * x_coord, canvas_scale * y_coord, canvas_scale, canvas_scale)
     }
 }
 
