@@ -8,6 +8,7 @@ import (
 	"net"
 	"github.com/gobuffalo/packr"
 	"github.com/alexandrevicenzi/go-sse"
+	"io"
 )
 
 
@@ -55,6 +56,28 @@ func handleConnection(conn net.Conn, gamestartC chan string, playerlocC chan str
 	}
 }
 
+
+func makeIDs(output chan chan int) func(http.ResponseWriter, *http.Request) {
+    return func(w http.ResponseWriter, r *http.Request) {
+		ch := make(chan int)
+		output <- ch
+		num := <-ch
+        io.WriteString(w, strconv.Itoa(num))
+    }
+}
+func genIDs(input chan bool, output chan chan int){
+	num := 0
+	for{
+		select {
+		case <-input:
+			num = 0
+		case ch := <-output:
+			num++
+			ch <- num
+		}
+	}
+}
+
 func startHTTPServer(gamestartC chan string, playerlocC chan string, playercountC chan chan int){
 	s := sse.NewServer(nil)
 	defer s.Shutdown()
@@ -62,18 +85,33 @@ func startHTTPServer(gamestartC chan string, playerlocC chan string, playercount
 	http.Handle("/events/", s)
 	box := packr.NewBox("./Web")
 	http.Handle("/", http.FileServer(box))
+
+	input := make(chan bool)
+	output := make(chan chan int)
+
+	handleIDs := makeIDs(output)
+	go genIDs(input, output)
+	http.HandleFunc("/id", handleIDs)
 	
 	go http.ListenAndServe(":8080",		nil)
 
 	for {
 		select {
 		case mapjson := <-gamestartC:
+			input <- true
 			s.SendMessage("/events/game", sse.SimpleMessage(mapjson))
 		case playerlocation:=  <-playerlocC:
 			s.SendMessage("/events/game", sse.SimpleMessage(playerlocation))
 		case pcC := <-playercountC:
-			k, _ :=s.GetChannel("/events/game")
-			pcC <- k.ClientCount()
+			k, err :=s.GetChannel("/events/game")
+			var count int
+			if err != true {
+				print("Channel does not exist")
+				count = 0
+			} else {
+				count = k.ClientCount()
+			}
+			pcC <- count
 		}
 	}
 
