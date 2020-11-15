@@ -72,37 +72,37 @@ function parseJson(jsonData)
                     break;
 
                 case 1:
-                    floor_colour_r = 245
-                    floor_colour_g = 181
-                    floor_colour_b = 61
+                    floor_colour_r = 255
+                    floor_colour_g = 0
+                    floor_colour_b = 0
                     console.log("gold")
                     break;
 
                 case 2:
-                    floor_colour_r = 61
-                    floor_colour_g = 245
-                    floor_colour_b = 211
+                    floor_colour_r = 0
+                    floor_colour_g = 255
+                    floor_colour_b = 0
                     console.log("case 3")
                     break;
 
                 case 3:
-                    floor_colour_r = 61
-                    floor_colour_g = 196
-                    floor_colour_b = 245
+                    floor_colour_r = 0
+                    floor_colour_g = 0
+                    floor_colour_b = 255
                     console.log("case 4")
                     break;
 
                 case 4:
-                    floor_colour_r = 232
-                    floor_colour_g = 56
-                    floor_colour_b = 220
+                    floor_colour_r = 255
+                    floor_colour_g = 178
+                    floor_colour_b = 0
                     console.log("case 5")
                     break;
 
                 case 5:
-                    floor_colour_r = 159
-                    floor_colour_g = 61
-                    floor_colour_b = 245
+                    floor_colour_r = 240
+                    floor_colour_g = 0
+                    floor_colour_b = 255
                     console.log("case 6")
                     break;
 
