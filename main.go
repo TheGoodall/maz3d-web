@@ -37,6 +37,7 @@ func handleConnection(conn net.Conn, gamestartC chan string, playerlocC chan str
 		if len(Data) >= 1 {
 			switch Data[0]{
 			case '!':
+				print(Data)
 				gamestartC <- formatToJSON(strings.TrimSuffix(Data[1:], "$"))
 			case '?':
 				req := make(chan int)
