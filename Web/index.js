@@ -38,7 +38,7 @@ var position;
 var floor_number; // Current floor number.
 var map_width;
 var map_height;
-var canvas_scale = 100;  // TODO: Fix scaling.
+var canvas_scale = 50;  // TODO: Fix scaling.
 var portals_list;
 var current_in_floor_portals = []; // List of "in" portals relating to current floor.
 var current_out_floor_portals = []; // List of "out" portals relating to the current floor.
@@ -234,7 +234,7 @@ function draw() {
                 break;
         }
         // console.log(x_coord, y_coord)
-        image(portal, canvas_scale * x_coord, canvas_scale * y_coord)
+        image(portal, canvas_scale * x_coord, canvas_scale * y_coord, canvas_scale, canvas_scale)
     }
     // Iterate through the "out" portals.
     for (i = 0; i < current_out_floor_portals.length; i++) {
@@ -267,7 +267,7 @@ function draw() {
 
         // console.log(x_coord, y_coord)
 
-        image(portal, canvas_scale * x_coord, canvas_scale * y_coord)
+        image(portal, canvas_scale * x_coord, canvas_scale * y_coord, canvas_scale, canvas_scale)
     }
     if(position && position["World"] === floor_number)
     {
