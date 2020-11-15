@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	//"encoding/json"
 	"strconv"
 	"strings"
 	"bufio"
@@ -53,28 +52,6 @@ func startTCPServer(gamestartC chan string, playerlocC chan string, playercountC
 
 }
 
-
-func formatToJSON(data string) string {
-	split := strings.Split(data, "/")
-	maps := strings.TrimSpace(split[0])
-	portals := strings.TrimSpace(split[1])
-
-	
-
-	print("\n###################\n")
-	print(maps)
-	print("\n###################\n")
-	print(portals)
-	print("\n###################\n")
-	
-	portals = strings.Split(portals, "\n")
-	for i, portal := range portals {
-		portals[i] = strings.Split(portal, "\n")
-	}
-
-	//return json.Marshal(datums)
-	return data
-}
 
 func startHTTPServer(gamestartC chan string, playerlocC chan string, playercountC chan chan int){
 	s := sse.NewServer(nil)
@@ -133,9 +110,4 @@ func main(){
 	}	
 	
 }
-
-
-
-
-
 
