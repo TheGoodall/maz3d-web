@@ -11,46 +11,49 @@ import (
 )
 
 
-func handleConnection(conn net.Conn) {
-
-
-}
-
 func startTCPServer(gamestartC chan string, playerlocC chan string, playercountC chan chan int, StopC chan bool){
 	ln, err := net.Listen("tcp", ":46920")
 	if err != nil {
 		panic("Error starting server")
 	}
-	conn, err := ln.Accept()
-	if err != nil {
-		panic("Could not accept connection")
-	}
-	defer conn.Close()
-
 	for {
-
-		Data, _ := bufio.NewReader(conn).ReadString('$')
-
-		switch Data[0]{
-		case '!':
-			gamestartC <- formatToJSON(strings.TrimSuffix(Data[1:], "$"))
-		case '?':
-			req := make(chan int)
-			playercountC <- req
-			playercount := <-req
-			conn.Write([]byte("?"+strconv.Itoa(playercount)+"$"))
-		case '#':
-			playerlocC <- strings.TrimSuffix(Data[1:], "$")
-		case 'X':
-			StopC <- true
-			break
-		default:
-			panic("Invalid TCP Packet")
-			
-		}}
+		conn, err := ln.Accept()
+		if err != nil {
+			panic("Could not accept connection")
+		}
+		go handleConnection(conn, gamestartC, playerlocC, playercountC, StopC)
+	}
 
 }
 
+func handleConnection(conn net.Conn, gamestartC chan string, playerlocC chan string, playercountC chan chan int, StopC chan bool){
+
+	defer conn.Close()
+
+	for {
+	
+		Data, _ := bufio.NewReader(conn).ReadString('$')
+		if len(Data) >= 1 {
+			switch Data[0]{
+			case '!':
+				gamestartC <- formatToJSON(strings.TrimSuffix(Data[1:], "$"))
+			case '?':
+				req := make(chan int)
+				playercountC <- req
+				playercount := <-req
+				conn.Write([]byte("?"+strconv.Itoa(playercount)+"$"))
+			case '#':
+				playerlocC <- strings.TrimSuffix(Data[1:], "$")
+			case 'X':
+				StopC <- true
+				break
+			default:
+				panic("Invalid TCP Packet")
+				
+			}
+		} else {break}
+	}
+}
 
 func startHTTPServer(gamestartC chan string, playerlocC chan string, playercountC chan chan int){
 	s := sse.NewServer(nil)
