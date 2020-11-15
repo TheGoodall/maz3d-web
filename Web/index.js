@@ -173,6 +173,8 @@ function preload() {
     out_pic_1 = loadImage('asset/out_arrow-1.png')
     out_pic_2 = loadImage('asset/out_arrow-2.png')
     out_pic_3 = loadImage('asset/out_arrow-3.png')
+
+    player_pic = loadImage('asset/player')
 }
 
 function setup() {
@@ -269,10 +271,10 @@ function draw() {
 
         image(portal, canvas_scale * x_coord, canvas_scale * y_coord, canvas_scale, canvas_scale)
     }
-    if(position && position["World"] === floor_number)
+    if(Math.round(position["World"]+1) == floor_number)
     {
         console.log("level ", floor_number)
-        square((position["x"])*canvas_scale, (map_y - position["y"])*canvas_scale, canvas_scale)
+        square((position["x"])*canvas_scale, (map_y - position["y"])*canvas_scale, canvas_scale * 0.25, canvas_scale * 0.25)
     }
 }
 
