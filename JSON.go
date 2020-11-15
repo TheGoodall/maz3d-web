@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"strings"
+	"fmt"
 	"strconv"
 )
 
@@ -10,7 +11,7 @@ type subportal struct {
 	World int
 	X float64
 	Y float64
-	Rotation float64
+	Rotation int64
 }
 type portal struct {
 	In subportal
@@ -66,39 +67,35 @@ func formatToJSON(data string) string {
 	var Portals []portal
 
 
-	var World int
-	var X float64
-	var Y float64
-	var Rot float64
-
 	var PortalsUnstringified []string
 	var SubportalUnstringified []string
-	var NumUnstringified []string
+	var NumUnstringified1 []string
+	var NumUnstringified2 []string
 
 
-	
 	PortalsUnstringified = strings.Split(portals, "\n")
 	Portals = []portal{}
 	for i := range(PortalsUnstringified){
 		SubportalUnstringified = strings.Split(PortalsUnstringified[i], "-")
 
-		NumUnstringified = strings.Split(SubportalUnstringified[0], ",")
+		NumUnstringified1 = strings.Split(SubportalUnstringified[0], ",")
 
-		World, _ =strconv.Atoi(NumUnstringified[0])
-		X, _ = strconv.ParseFloat(NumUnstringified[1], 64)
-		Y, _ = strconv.ParseFloat(NumUnstringified[2], 64)
-		Rot, _ = strconv.ParseFloat(NumUnstringified[3], 64)
+		World1, _ := strconv.Atoi(NumUnstringified1[0])
+		X1, _ := strconv.ParseFloat(NumUnstringified1[1], 64)
+		Y1, _ := strconv.ParseFloat(NumUnstringified1[2], 64)
+		Rot1, _ := strconv.ParseInt(strings.TrimSpace(NumUnstringified1[3]), 10, 64)
 		
-		numsIn = subportal{World, X, Y, Rot}
+		numsIn = subportal{World1, X1, Y1, Rot1}
 
-		NumUnstringified = strings.Split(SubportalUnstringified[1], ",")
+		NumUnstringified2 = strings.Split(SubportalUnstringified[1], ",")
 
-		World, _ =strconv.Atoi(NumUnstringified[0])
-		X, _ = strconv.ParseFloat(NumUnstringified[1], 64)
-		Y, _ = strconv.ParseFloat(NumUnstringified[2], 64)
-		Rot, _ = strconv.ParseFloat(NumUnstringified[3], 64)
-		
-		numsOut = subportal{World, X, Y, Rot}
+		World2, _ := strconv.Atoi(NumUnstringified2[0])
+		X2, _ := strconv.ParseFloat(NumUnstringified2[1], 64)
+		Y2, _ := strconv.ParseFloat(NumUnstringified2[2], 64)
+		Rot2, _ := strconv.ParseInt(strings.TrimSpace(NumUnstringified2[3]), 10, 64)
+
+
+		numsOut = subportal{World2, X2, Y2, Rot2}
 		
 		Subportals = portal{numsIn, numsOut}
 		Portals = append(Portals, Subportals)
