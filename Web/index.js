@@ -174,7 +174,7 @@ function preload() {
     out_pic_2 = loadImage('asset/out_arrow-2.png')
     out_pic_3 = loadImage('asset/out_arrow-3.png')
 
-    player_pic = loadImage('asset/player')
+    player_pic = loadImage('asset/player.png')
 }
 
 function setup() {
