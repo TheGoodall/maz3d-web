@@ -33,7 +33,7 @@ let out_pic_1;
 let out_pic_2;
 let out_pic_3;
 
-var map_matrix;
+var map_matrix = [];
 var position;
 var floor_number; // Current floor number.
 var map_width;
@@ -50,7 +50,8 @@ function parseJson(jsonData)
     floor_number = 1; // TODO: Change this when available.
     map_matrix = jsonData["Maps"][0];
     portals_list = jsonData["Portals"];
-    console.log(map_matrix)
+    console.log(map_matrix);
+    flag = true;
     }
     else
     {
@@ -58,6 +59,8 @@ function parseJson(jsonData)
 
     }
 }
+
+let flag = false;
 
 // Parsing JSON. TODO: Uncomment this when done.
 e = new EventSource('http://192.168.1.171:8080/events/game');
@@ -97,6 +100,11 @@ function setup() {
 }
 
 function draw() {
+
+    if (!flag) {
+        return
+    }
+    console.log("FUCK")
     createCanvas(map_width, map_height)
     create_map()
 
