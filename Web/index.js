@@ -275,7 +275,7 @@ function draw() {
     if(Math.round(position["World"]+1) == floor_number)
     {
         console.log("level ", floor_number)
-        square((position["x"])*canvas_scale, (map_y - position["y"])*canvas_scale, canvas_scale * 0.25, canvas_scale * 0.25)
+        square((position["x"])*canvas_scale, (map_y - position["y"])*canvas_scale, 10, 10)
     }
 }
 
