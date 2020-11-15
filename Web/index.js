@@ -60,7 +60,7 @@ function parseJson(jsonData)
 }
 
 // Parsing JSON. TODO: Uncomment this when done.
-e = new EventSource('/events/game');
+e = new EventSource('http://192.168.1.171:8080/events/game');
 e.onmessage = function(event) {
     console.log(event.data);
     console.log("PRICK")  // TODO: Remove this when done.
@@ -70,7 +70,7 @@ e.onmessage = function(event) {
 
 // // TODO: Remove below when done.
 // parseJson({"Maps":[[[false,false,false,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]]],
-//     "Portals":[{"In":{"World":1,"X":0,"Y":1,"Rotation":1},"Out":{"World":1,"X":0,"Y":4,"Rotation":0}},{"In":{"World":5,"X":6,"Y":7,"Rotation":1},"Out":{"World":4,"X":5,"Y":6,"Rotation":7}}]})
+//     "Portals":[{"In":{"World":1,"X":2,"Y":2,"Rotation":3},"Out":{"World":1,"X":5,"Y":2,"Rotation":2}},{"In":{"World":5,"X":6,"Y":7,"Rotation":1},"Out":{"World":4,"X":5,"Y":6,"Rotation":7}}]})
 
 // This variable contains a list of where all of the empty spaces should be
 // ie, the places that the player should be able to walk through.
@@ -123,7 +123,7 @@ function draw() {
 
             case 0:
                 portal = in_pic_0;
-                y_coord++
+                y_coord--
                 break;
 
             case 1:
@@ -133,7 +133,7 @@ function draw() {
 
             case 2:
                 portal = in_pic_2;
-                y_coord--
+                y_coord++
                 break;
 
             case 3:
@@ -164,12 +164,12 @@ function draw() {
 
             case 2:
                 portal = out_pic_2;
-                y_coord--
+                y_coord++
                 break;
 
             case 3:
                 portal = out_pic_3;
-                x_coord++
+                x_coord--
                 break;
         }
 
