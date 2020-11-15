@@ -18,7 +18,7 @@ var placeholder_portals =   [
     [[0, 3, 4, 2], [0, 1, 1, 1]],
     [[0, 1, 0, 0], [2, 2, 2, 2]]
 ]
-var placeholder_floor_number = 0
+var placeholder_floor_number = 1
 
 
 
@@ -47,7 +47,7 @@ function parseJson(jsonData)
 {
     if(jsonData.hasOwnProperty("Maps"))
     {
-          floor_number = placeholder_floor_number; // TODO: Change this when available.
+    floor_number = 1; // TODO: Change this when available.
     map_matrix = jsonData["Maps"][0];
     portals_list = jsonData["Portals"];
     console.log(map_matrix)
@@ -60,7 +60,7 @@ function parseJson(jsonData)
 }
 
 // Parsing JSON. TODO: Uncomment this when done.
-e = new EventSource('http://192.168.1.171:8080/events/game');
+e = new EventSource('/events/game');
 e.onmessage = function(event) {
     console.log(event.data);
     console.log("PRICK")  // TODO: Remove this when done.
@@ -68,8 +68,9 @@ e.onmessage = function(event) {
     parseJson(jsonData)
 };
 
-
-//parseJson({"Maps":[[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]]],"Portals":[{"In":{"World":1,"X":0,"Y":1,"Rotation":1},"Out":{"World":1,"X":0,"Y":4,"Rotation":0}},{"In":{"World":5,"X":6,"Y":7,"Rotation":1},"Out":{"World":4,"X":5,"Y":6,"Rotation":7}}]})
+// // TODO: Remove below when done.
+// parseJson({"Maps":[[[false,false,false,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]],[[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,false,true,false,true,false,true],[true,false,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,false,true,false,true,false,false,true,false,true,false]]],
+//     "Portals":[{"In":{"World":1,"X":0,"Y":1,"Rotation":1},"Out":{"World":1,"X":0,"Y":4,"Rotation":0}},{"In":{"World":5,"X":6,"Y":7,"Rotation":1},"Out":{"World":4,"X":5,"Y":6,"Rotation":7}}]})
 
 // This variable contains a list of where all of the empty spaces should be
 // ie, the places that the player should be able to walk through.
@@ -109,53 +110,72 @@ function draw() {
         square(empty_location[i][0], empty_location[i][1], canvas_scale)
     }
 
+    let x_coord;
+    let y_coord;
+
     // Iterate through the "in" portals.
     for (i = 0; i < current_in_floor_portals.length; i++) {
+        x_coord = current_in_floor_portals[i]['X']
+        y_coord = current_in_floor_portals[i]['Y']
+
         // Determines which picture of portal to use depending on orientation.
         switch(current_in_floor_portals[i]['Rotation']) {
 
             case 0:
                 portal = in_pic_0;
+                y_coord++
                 break;
 
             case 1:
                 portal = in_pic_1;
+                x_coord++
                 break;
 
             case 2:
                 portal = in_pic_2;
+                y_coord--
                 break;
 
             case 3:
                 portal = in_pic_3;
+                x_coord--
                 break;
         }
-
-        image(portal, canvas_scale * current_in_floor_portals[i]['X'], canvas_scale * current_in_floor_portals[i]['Y'])
+        // console.log(x_coord, y_coord)
+        image(portal, canvas_scale * x_coord, canvas_scale * y_coord)
     }
     // Iterate through the "out" portals.
     for (i = 0; i < current_out_floor_portals.length; i++) {
+        x_coord = current_out_floor_portals[i]['X'];
+        y_coord = current_out_floor_portals[i]['Y'];
+
         // Determines which picture of portal to use depending on orientation.
         switch(current_out_floor_portals[i]['Rotation']) {
 
             case 0:
                 portal = out_pic_0;
+                y_coord--;
                 break;
 
             case 1:
                 portal = out_pic_1;
+                x_coord++;
                 break;
 
             case 2:
                 portal = out_pic_2;
+                y_coord--
                 break;
 
             case 3:
                 portal = out_pic_3;
+                x_coord++
                 break;
         }
 
-        image(portal, canvas_scale * current_out_floor_portals[i]['X'], canvas_scale * current_out_floor_portals[i]['Y'])
+        // console.log(x_coord, y_coord)
+
+        image(portal, canvas_scale * x_coord, canvas_scale * y_coord)
     }
     if(position)
     {
@@ -170,7 +190,6 @@ function create_map() {
     let render_location_x
     let render_location_y
 
-    if(map_matrix == undefined || map_matrix[0].length == 0) return;
 
 
     // Set size of the canvas.
@@ -217,22 +236,23 @@ function create_map() {
     //         current_out_floor_portals.push(portals_list[i][1])
     //     }
     // }
-
+        current_in_floor_portals = []
+        current_out_floor_portals = []
         for (let i = 0; i < portals_list.length; i++) {
         // TODO: Delete these console.logs.
         // TODO: Fix portals properly.
-        console.log("SHIT")
+            console.log("SHIT")
 
         // Separate portals into "in" portals and "out" portals.
         // Collect all "in" portals corresponding to current floor.
-        //if (portals_list[i]["In"][0] === floor_number) {
+        if (portals_list[i]["In"]["World"] === floor_number) {
             current_in_floor_portals.push(portals_list[i]["In"])
-        //}
+        }
 
         // Collect all "out" portals corresponding to current floor.
-        //if (portals_list[i]["Out"][0] === floor_number) {
+        if (portals_list[i]["Out"]["World"] === floor_number) {
             current_out_floor_portals.push(portals_list[i]["Out"])
-        //}
+        }
     }
 
 }
