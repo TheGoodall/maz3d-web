@@ -31,7 +31,6 @@ func startTCPServer(gamestartC chan string, playerlocC chan string, playercountC
 
 		Data, _ := bufio.NewReader(conn).ReadString('$')
 
-		
 		switch Data[0]{
 		case '!':
 			gamestartC <- formatToJSON(strings.TrimSuffix(Data[1:], "$"))
@@ -39,7 +38,7 @@ func startTCPServer(gamestartC chan string, playerlocC chan string, playercountC
 			req := make(chan int)
 			playercountC <- req
 			playercount := <-req
-			conn.Write([]byte((strconv.Itoa(playercount))+"$"))
+			conn.Write([]byte("?"+strconv.Itoa(playercount)+"$"))
 		case '#':
 			playerlocC <- strings.TrimSuffix(Data[1:], "$")
 		case 'X':
@@ -60,9 +59,8 @@ func startHTTPServer(gamestartC chan string, playerlocC chan string, playercount
 	http.Handle("/events/", s)
 	box := packr.NewBox("./Web")
 	http.Handle("/", http.FileServer(box))
-
-
-	go http.ListenAndServe(":8080", nil)
+	
+	go http.ListenAndServe(":8080",		nil)
 
 	for {
 		select {
