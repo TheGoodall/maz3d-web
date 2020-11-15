@@ -161,6 +161,7 @@ var empty_location = [];
 
 var map_x
 var map_y
+var player_pic
 
 // Preloads the images for the portals. TODO: Finish this.
 function preload() {
